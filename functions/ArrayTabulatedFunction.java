@@ -2,7 +2,7 @@ package functions;
 
 import java.io.*;
 
-public class ArrayTabulatedFunction implements TabulatedFunction, Serializable, Externalizable {
+public class ArrayTabulatedFunction implements TabulatedFunction, Externalizable {
 
     private FunctionPoint[] points;
     private int size;
@@ -211,15 +211,6 @@ public class ArrayTabulatedFunction implements TabulatedFunction, Serializable, 
         size++;
     }
 
-    public void printTabulatedFunction() {
-        int pointsCount = getPointsCount();
-        for (int i = 0; i < pointsCount; i++) {
-            double x = getPointX(i);
-            double y = getPointY(i);
-            System.out.println("x = " + x + ", y = " + y);
-        }
-    }
-
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
         out.writeInt(size);
@@ -243,4 +234,11 @@ public class ArrayTabulatedFunction implements TabulatedFunction, Serializable, 
         }
     }
 
+    public FunctionPoint[] getAllPoints() {
+        FunctionPoint[] result = new FunctionPoint[size];
+        for (int i = 0; i < size; i++) {
+            result[i] = new FunctionPoint(points[i]);
+        }
+        return result;
+    }
 }

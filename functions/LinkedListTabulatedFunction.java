@@ -1,8 +1,10 @@
 package functions;
 
-public class LinkedListTabulatedFunction implements TabulatedFunction {
+import java.io.*;
 
-    private static class FunctionNode {
+public class LinkedListTabulatedFunction implements TabulatedFunction, Serializable {
+
+    private static class FunctionNode implements Serializable {
         private FunctionPoint point;
         private FunctionNode prev;
         private FunctionNode next;
@@ -302,12 +304,11 @@ public class LinkedListTabulatedFunction implements TabulatedFunction {
         newNode.point = newPoint;
     }
 
-    public void printTabulatedFunction() {
-        int pointsCount = getPointsCount();
-        for (int i = 0; i < pointsCount; i++) {
-            double x = getPointX(i);
-            double y = getPointY(i);
-            System.out.println("x = " + x + ", y = " + y);
+    public FunctionPoint[] getAllPoints() {
+        FunctionPoint[] result = new FunctionPoint[getPointsCount()];
+        for (int i = 0; i < getPointsCount(); i++) {
+            result[i] = getPoint(i);
         }
+        return result;
     }
 }

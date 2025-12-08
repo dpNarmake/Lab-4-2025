@@ -12,5 +12,5 @@ public interface TabulatedFunction extends Function {
     void setPointY(int index, double y);
     void deletePoint(int index);
     void addPoint(FunctionPoint point) throws InappropriateFunctionPointException;
-    void printTabulatedFunction();
+    FunctionPoint[] getAllPoints();
 }

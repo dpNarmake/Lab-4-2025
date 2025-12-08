@@ -88,9 +88,15 @@ public class Main {
             err.printStackTrace();
         }
 
+        // логарифм по натуральному основанию, взятый от экспоненты
+        Function exp = new Exp();
+        Function log = new Log(Math.E);
+        Function composition = Functions.composition(log, exp);
 
-        // сериализация
-        TabulatedFunction logTabulatedSer = TabulatedFunctions.tabulate(new Log(Math.E), 0, 10, 11);
+        TabulatedFunction Ln_E = TabulatedFunctions.tabulate(composition, 0, 10, 11);
+
+        // LinkedListTabulatedFunction реализует Serializable
+        LinkedListTabulatedFunction logTabulatedSer = new LinkedListTabulatedFunction(Ln_E.getAllPoints());
 
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("serializable_tabulated_log.txt"))) {
             oos.writeObject(logTabulatedSer);
@@ -99,7 +105,7 @@ public class Main {
         }
 
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("serializable_tabulated_log.txt"))) {
-            TabulatedFunction readLogTabulated = (TabulatedFunction) ois.readObject();
+            LinkedListTabulatedFunction readLogTabulated = (LinkedListTabulatedFunction) ois.readObject();
 
             System.out.println("\nserializable: значения исходной и считанной функций Log на отрезке от 0 до 10 с шагом 1:");
             System.out.println("исходная функция:");
@@ -111,7 +117,8 @@ public class Main {
             err.printStackTrace();
         }
 
-        TabulatedFunction logTabulatedEx = TabulatedFunctions.tabulate(new Log(Math.E), 0, 10, 11);
+        // ArrayTabulatedFunction реализует Externalizable
+        ArrayTabulatedFunction logTabulatedEx = (ArrayTabulatedFunction) Ln_E;
 
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("externalizable_tabulated_log.txt"))) {
             oos.writeObject(logTabulatedEx);
@@ -120,7 +127,7 @@ public class Main {
         }
 
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("externalizable_tabulated_log.txt"))) {
-            TabulatedFunction readLogTabulated = (TabulatedFunction) ois.readObject();
+            ArrayTabulatedFunction readLogTabulated = (ArrayTabulatedFunction) ois.readObject();
 
             System.out.println("\nexternalizable: значения исходной и считанной функций Log на отрезке от 0 до 10 с шагом 1:");
             System.out.println("исходная функция:");
@@ -131,6 +138,7 @@ public class Main {
         } catch (IOException | ClassNotFoundException err) {
             err.printStackTrace();
         }
+
     }
 
     private static void printFunctionValues(Function function, double start, double end, double step) throws Exception {
